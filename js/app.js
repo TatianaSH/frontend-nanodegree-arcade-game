@@ -9,6 +9,52 @@ var Enemy = function() {
     this.init();
  
 }
+var SpeedEnemy = function(){
+    Enemy.call(this);
+}
+SpeedEnemy.prototype = Object.create(Enemy.prototype);
+SpeedEnemy.prototype.constructor = SpeedEnemy;
+SpeedEnemy.prototype.render = function() {
+// 1) Create a canvas, either on the page or simply in code
+var canvas = document.createElement('canvas');
+//canvas.style.background ="transparent";
+var ctx2    = canvas.getContext('2d');
+//ctx2.globalAlpha   = 0.4;
+
+// 2) Copy  image data into the canvas
+ctx2.drawImage( Resources.get(this.sprite), 0, 0 );
+
+// 3) Read image data
+var w = 101, h= 171;
+var imageData = ctx2.getImageData(0,0,w,h);
+
+
+// 4) Read or manipulate the rgba 
+for (var i=0;i<imageData.data.length;i+=4)
+  {
+ var r = imageData.data[i+0];
+ var g = imageData.data[i+1];
+ var b = imageData.data[i+2];
+ var grey = (r+g+b)/3;
+ //if(grey == 255) grey = 0;
+ imageData.data[i+0] = grey;
+ imageData.data[i+1] = grey;
+ imageData.data[i+2] = grey;
+
+ //imageData.data[i+3] = 0;
+ //if(grey > 10) imageData.data[i+3] = 128;
+  //else imageData.data[i+3]=128;
+}
+
+// 5) Update the context with newly-modified data
+ctx.putImageData(imageData,this.x, this.y);
+
+
+
+
+
+    //ctx.drawImage(Resources.get(this.sprite), this.x, this.y); 
+}
 
 
 // Update the enemy's position, required method for game
@@ -84,6 +130,7 @@ Player.prototype.render = function() {
 Player.prototype.next = function(){
     this.ind += 1;
     this.reset();
+    this.score += 50;
         if (this.ind >= 5){
         this.ind = 0;
         this.level += 1;
@@ -189,6 +236,7 @@ var allEnemies = [];
 for (var i = 0; i < 5; i++) {
 allEnemies.push( new Enemy());
 }
+allEnemies.push(new SpeedEnemy()); 
 var player = new Player();
 
 var Gem = function(){
@@ -218,16 +266,20 @@ Heart.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprites), this.x, this.y+25, 90, 150);}
 }
 Heart.prototype.update = function(dt) {
+    var tmp = this.timePassed;
     this.timePassed +=dt;
-    if (this.timePassed > 20){
-        this.init();
-    }
-   
-    if (this.timePassed > 40){
-    
+    if (this.timePassed >= 20 
+        && tmp < 20){
+        this.x = getRandomInt(0, 5) * 101;
+        this.y = lines[randomLineIndex()];  
+}
+
+   if (this.timePassed >= 40 
+        && tmp < 40){
         this.x = -100;
         this.y = -100;
-        this.timePassed = 0;}
+        this.timePassed = 0
+   }
 }
 Heart.prototype.init = function(){
     this.x = getRandomInt(0, 5) * 101;
