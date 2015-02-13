@@ -188,7 +188,7 @@ Player.prototype.Start = function(){
                ctx.fillText("the road as each of the 5 players, ", 80, 340);
                ctx.fillText("you will go to next level. You can", 80, 380);
                ctx.fillText("pick up Gems. It gives you extra points.", 80, 420);
-               ctx.fillText("Beware blue bug!!!", 150, 460);
+               ctx.fillText("Beware of blue bug!!!", 150, 460);
                ctx.fillStyle = "red";
                ctx.font = '800 24pt Nunito';
                ctx.fillText("Press Space to start game", 80, 500);
