@@ -1,6 +1,17 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+WELCOME!
+The road is very dangerous.
+Your goal is to cross the road.
+If the player has a collision with a bug,
+you lose one life. When you've crossed
+the road as each of the 5 players,
+you will go to next level. You can
+pick up Gems. It gives you extra points.
+Hearts may add life.
+Game is over if you lost last life.
+Beware of blue bug!!! It ends the game.
+Use arrow keys to move avatar.
 
-for self-checking their submission.
+http://tatianash.github.io/frontend-nanodegree-arcade-game/

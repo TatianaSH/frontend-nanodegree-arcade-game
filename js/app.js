@@ -1,4 +1,4 @@
-    // Enemies our player must avoid
+// Enemies our player must avoid
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
@@ -8,29 +8,33 @@ var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
     this.init();
 
-}
+};
+
+//Creating speed blue bug, game over after collision player and this bug 
 var SpeedEnemy = function(){
     Enemy.call(this);
     this.sprite = 'images/speed-enemy-bug.png';
-}
+};
+
 SpeedEnemy.prototype = Object.create(Enemy.prototype);
 SpeedEnemy.prototype.constructor = SpeedEnemy;
-SpeedEnemy.prototype.init = function(){
+SpeedEnemy.prototype.init = function() {
     Enemy.prototype.init.call(this);
     this.x = getRandomInt(-5000, -4500);
     this.speed = getRandomInt(250, 500); 
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    this.x += dt*this.speed;
-    if (this.x > 505) {
-        this.init();
-}
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x += dt*this.speed;
+    if (this.x > 505) {
+        this.init();
+    }
+
 }
 Enemy.prototype.init = function(){
     this.x = getRandomInt(-250, -100);
@@ -43,23 +47,26 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+// Player's life reduced by one on collision with enemy 
 Enemy.prototype.onCollision = function(player) {
         player.reset();
         player.life-=1;
 }
-
+// Player's life dropped to zero on collision with speed enemy
 SpeedEnemy.prototype.onCollision = function(player) {
         player.reset();
         player.life = 0;
 }
 
+// Generate random integer in a range [min,max]
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
-}
+};
 
+// Random index [0,2] (used to choose random row)
 var randomLineIndex = function(){
     return  Math.round(Math.random()*3 -0.5);
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -76,7 +83,7 @@ var Player = function() {
     this.ind = 0;
     this.life = -1;
 
-}
+};
 Player.prototype.renderScoreLine = function(){
     ctx.font = '400 24pt Nunito';
     ctx.clearRect(0,0, 500,40)
@@ -87,9 +94,8 @@ Player.prototype.renderScoreLine = function(){
 }
 Player.prototype.update = function(dt) {
     this.checkCollisions(dt);
-
 }
-
+// Move player to initial position
 Player.prototype.reset = function() {
     this.x = 202;
     this.y = 407;
@@ -101,6 +107,7 @@ Player.prototype.render = function() {
 
 }
 
+// Advance to a next avatar, calculate score and level
 Player.prototype.next = function(){
     this.ind += 1;
     this.reset();
@@ -110,11 +117,9 @@ Player.prototype.next = function(){
         this.level += 1;
         allEnemies.push( new Enemy());
         this.score += 100;
-
-        //this.renderScoreLine();
     }
 }
-//check for Player/bug collisions
+//check for Player/bug/gem/heart collisions
 Player.prototype.checkCollisions = function(dt){
     for(var i in allEnemies) {
         if( Math.abs(this.x - allEnemies[i].x) <= 40
@@ -125,7 +130,6 @@ Player.prototype.checkCollisions = function(dt){
 
     if( Math.abs(this.x - gem.x) <= 40 && Math.abs(this.y - gem.y) <= 40) {
         this.score = this.score + 20;
-        //this.renderScoreLine();
         gem.init();
     }
 
@@ -145,6 +149,7 @@ Player.prototype.checkCollisions = function(dt){
     }
 }
 
+// Space - to start/restart game
 Player.prototype.handleInput = function(direction){
     if (this.life <=0 ) {
         if(direction == "space") {
@@ -163,6 +168,7 @@ Player.prototype.handleInput = function(direction){
         this.y = this.y + 83;
 
 }
+// Set game to initial settings after "Game over"
 Player.prototype.restart = function(){
             this.life = 5;
             this.score = 0;
@@ -174,6 +180,7 @@ Player.prototype.restart = function(){
             }
     
 }
+// Draw a start/final screen
 Player.prototype.Start = function(){
     if (this.life == -1){
                ctx.save();
@@ -216,15 +223,16 @@ Player.prototype.Start = function(){
 var lines = [65, 148, 231];
 var allEnemies = [];
 for (var i = 0; i < 5; i++) {
-allEnemies.push( new Enemy());
+    allEnemies.push( new Enemy());
 }
 allEnemies.push(new SpeedEnemy()); 
 var player = new Player();
 
+//Gems add bonus score if collected
 var Gem = function(){
     this.sprites = ['images/Gem Blue.png', 'images/Gem Green.png', 'images/Gem Orange.png'];
     this.init();
-}
+};
 Gem.prototype.render = function() {
     if(player.life > 0){
     ctx.drawImage(Resources.get(this.sprites[this.ind]), this.x, this.y, 90, 150);}
@@ -237,12 +245,13 @@ Gem.prototype.init = function(){
 }
 var gem = new Gem();
 
+// Heart adds life (up to 5)
 var Heart = function(){
     this.sprites = 'images/Heart.png';
     this.x = -100;
     this.y = -100;
     this.timePassed = 0;
-}
+};
 Heart.prototype.render = function() {
     if(player.life > 0){
     ctx.drawImage(Resources.get(this.sprites), this.x, this.y+25, 90, 150);}
@@ -254,7 +263,7 @@ Heart.prototype.update = function(dt) {
         && tmp < 20){
         this.x = getRandomInt(0, 5) * 101;
         this.y = lines[randomLineIndex()];  
-}
+    }
 
    if (this.timePassed >= 40 
         && tmp < 40){
@@ -267,9 +276,8 @@ Heart.prototype.init = function(){
     this.x = getRandomInt(0, 5) * 101;
     this.y = lines[randomLineIndex()];
     this.timePassed = 0;
-    }
+}
 var heart = new Heart();
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
