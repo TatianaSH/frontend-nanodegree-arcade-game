@@ -38,5 +38,5 @@ Contact with blue bug ends the game.</p>
 <p>The game ends when you lose all of your lives or contact a blue bug.</p>
 
 <p>Start the game by opening the following link in your web browser:</p>
-<a href="http://tatianash.github.io/frontend-nanodegree-arcade-game/"></a>
+<a href="http://tatianash.github.io/frontend-nanodegree-arcade-game/">http://tatianash.github.io/frontend-nanodegree-arcade-game/</a>
 
